@@ -1,7 +1,7 @@
 table Incident_fact
 	lineageTag: d1049d9c-5684-4d0f-b96b-c8e4f4129ccb
 
-	measure 'Total incidents' = COUNT(Incident_fact[IncID])
+	measure 'Total incidents a' = COUNT(Incident_fact[IncID])
 		formatString: 0
 		lineageTag: 3d4f3b9a-5157-4e9c-80d2-a7580daef212
 
