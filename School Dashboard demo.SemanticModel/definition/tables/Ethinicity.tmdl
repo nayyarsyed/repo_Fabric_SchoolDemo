@@ -1,0 +1,33 @@
+table Ethinicity
+	lineageTag: 31446f37-0016-49c1-b23c-5f4e9286193b
+
+	column EID
+		dataType: int64
+		formatString: 0
+		lineageTag: d7c8ec35-e37a-464c-82c5-4eff34b75cea
+		summarizeBy: none
+		sourceColumn: EID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 1e4bf71a-2102-48da-aef6-add5b74b128c
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Ethinicity = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\nayya\OneDrive\Desktop\Interview prep\School Data sample.xlsx"), null, true),
+				    Ethinicity_Sheet = Source{[Item="Ethinicity",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Ethinicity_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"EID", Int64.Type}, {"Name", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

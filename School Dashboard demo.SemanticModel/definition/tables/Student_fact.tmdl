@@ -1,0 +1,120 @@
+table Student_fact
+	lineageTag: e4b83a4c-dcae-4c60-9394-d23d1acf8ea1
+
+	measure 'Student count' = COUNT(Student_fact[SID])
+		formatString: 0
+		lineageTag: 53ace91c-c08c-43f9-8a30-de3202770c76
+
+	measure 'National participation count' = COUNT(Student_fact[National_Success_Type])
+		formatString: 0
+		lineageTag: bece8c6e-38f1-4fa3-ad6b-8e1e706f60ec
+
+	column SID
+		dataType: int64
+		formatString: 0
+		lineageTag: 269a3c5d-65ea-4c0f-8218-a1ab27d7a466
+		summarizeBy: count
+		sourceColumn: SID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gender
+		dataType: string
+		lineageTag: d7b91bb0-3665-49f8-bd8e-0abd20559bd0
+		summarizeBy: none
+		sourceColumn: Gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column EID
+		dataType: int64
+		formatString: 0
+		lineageTag: 50c1537a-7eb9-4763-bd9c-07f499417cac
+		summarizeBy: none
+		sourceColumn: EID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: 4687aa5f-93ca-4ec2-9a23-664907a92641
+		summarizeBy: sum
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+	column Classid
+		dataType: int64
+		formatString: 0
+		lineageTag: 9133347c-39f3-4131-b11a-cfddc4094bb9
+		summarizeBy: none
+		sourceColumn: Classid
+
+		annotation SummarizationSetBy = Automatic
+
+	column TID
+		dataType: int64
+		formatString: 0
+		lineageTag: 02de75cf-047c-400a-8ebf-7fd693706703
+		summarizeBy: none
+		sourceColumn: TID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Enrol_Year
+		dataType: int64
+		formatString: 0
+		lineageTag: ba1ca9c9-0e5e-4173-9923-3c0d08dc95c3
+		summarizeBy: sum
+		sourceColumn: Enrol_Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Volunteering
+		dataType: string
+		lineageTag: 22bb6e0d-7663-4669-8319-8c1ea59c13e7
+		summarizeBy: none
+		sourceColumn: Volunteering
+
+		annotation SummarizationSetBy = Automatic
+
+	column Attendance
+		dataType: double
+		lineageTag: cd8bf6bd-5c11-4572-a522-fa38c4acae54
+		summarizeBy: sum
+		sourceColumn: Attendance
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column National_Success_Type
+		dataType: string
+		lineageTag: 1149b0ed-4dc2-41ae-a8e8-c529c08bfc90
+		summarizeBy: none
+		sourceColumn: National_Success_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column win_status
+		dataType: string
+		lineageTag: a2a6c8cd-7b1a-42e1-a010-a90b11454c4f
+		summarizeBy: none
+		sourceColumn: win_status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Student_fact = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\nayya\OneDrive\Desktop\Interview prep\School Data sample.xlsx"), null, true),
+				    Student_fact_Sheet = Source{[Item="Student_fact",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Student_fact_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"SID", Int64.Type}, {"Gender", type text}, {"EID", Int64.Type}, {"Age", Int64.Type}, {"Classid", Int64.Type}, {"TID", Int64.Type}, {"Enrol_Year", Int64.Type}, {"Volunteering", type text}, {"Attendance", type number}, {"National_Success_Type", type text}, {"win_status", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

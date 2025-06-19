@@ -1,0 +1,28 @@
+relationship 9ed5e552-db87-4ee0-bb3c-a4b50a8c4daf
+	fromColumn: Student_fact.EID
+	toColumn: Ethinicity.EID
+
+relationship 0c89b876-b2be-42fa-ae29-aeade69442c6
+	fromColumn: Student_fact.TID
+	toColumn: Teacher.TID
+
+relationship fbd4df6b-5318-408b-b1bc-9783ea8f804a
+	fromColumn: Student_fact.Classid
+	toColumn: Class.Classid
+
+relationship 2444339d-9b0e-4e76-89a7-e61d7685f6ec
+	fromColumn: Incident_fact.ClassID
+	toColumn: Class.Classid
+
+relationship 4a6a16b0-16f3-4959-a5be-798edc84c32b
+	fromColumn: Asset_fact.AssetID
+	toColumn: asset.Asset_id
+
+relationship 01e82fb2-1bda-4b61-ba4c-2481defa352d
+	fromColumn: Incident_fact.incident_type_id
+	toColumn: Incident.incident_type_id
+
+relationship 505b8efd-df88-4358-8c65-0df85970e91a
+	fromColumn: Asset_fact.Classid
+	toColumn: Class.Classid
+

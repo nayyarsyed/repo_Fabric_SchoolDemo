@@ -1,0 +1,53 @@
+table Teacher
+	lineageTag: 86c07584-6b11-42ad-b947-6ab61141fb33
+
+	measure 'Teacher count' = COUNT(Teacher[TID])
+		formatString: 0
+		lineageTag: a6490a4e-ad5b-4829-b4f7-f5e1292bdeb1
+
+	column TID
+		dataType: int64
+		formatString: 0
+		lineageTag: f7c4a224-51cd-4b0f-84e6-979cbc17d30c
+		summarizeBy: none
+		sourceColumn: TID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: dfe2a6ab-5459-4d60-921b-50adbc4c6859
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Active
+		dataType: string
+		lineageTag: 7e180530-c51b-440e-b52f-570c5abfd980
+		summarizeBy: none
+		sourceColumn: Active
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 1ed61374-0d66-447a-8b44-d023ca235856
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Teacher = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\nayya\OneDrive\Desktop\Interview prep\School Data sample.xlsx"), null, true),
+				    Teacher_Sheet = Source{[Item="Teacher",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Teacher_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"TID", Int64.Type}, {"Name", type text}, {"Active", type text}, {"Status", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

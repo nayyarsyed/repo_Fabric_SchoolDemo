@@ -1,0 +1,46 @@
+table asset
+	lineageTag: b012a293-c2ba-4015-a778-2d0e1a37a7ed
+
+	measure Laptopcount = SUM(asset[Assetcost])
+		formatString: 0
+		lineageTag: 543a7246-9355-4929-9a82-2d3601c652d8
+
+	column Asset_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a5ac0b9e-c3b2-4646-9213-cbf6944816b1
+		summarizeBy: none
+		sourceColumn: Asset_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Assetype
+		dataType: string
+		lineageTag: f7decb25-3af9-405d-b058-c9c4f360c5c0
+		summarizeBy: none
+		sourceColumn: Assetype
+
+		annotation SummarizationSetBy = Automatic
+
+	column Assetcost
+		dataType: int64
+		formatString: 0
+		lineageTag: 03872f12-3e0d-4f1b-9f43-41b5c866fc3f
+		summarizeBy: none
+		sourceColumn: Assetcost
+
+		annotation SummarizationSetBy = Automatic
+
+	partition asset = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\nayya\OneDrive\Desktop\Interview prep\School Data sample.xlsx"), null, true),
+				    asset_Sheet = Source{[Item="asset",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(asset_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Asset_id", Int64.Type}, {"Assetype", type text}, {"Assetcost", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,52 @@
+table Asset_fact
+	lineageTag: a03a773c-7331-4bf6-b741-9b784eaa4e1a
+
+	measure laptopcount_fact = ```
+			SUM(Asset_fact[Actualcount]) 
+			```
+		formatString: 0
+		lineageTag: 2c237711-c979-4d58-b44e-263b18e16ee2
+
+	measure TotalLaptop
+		lineageTag: ebf085c3-3d3e-4b14-810f-306febbefc41
+
+	column AssetID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3d2d02b3-7181-42f1-a570-74c91418208c
+		summarizeBy: none
+		sourceColumn: AssetID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Classid
+		dataType: int64
+		formatString: 0
+		lineageTag: c9993df4-47f1-4e8f-af33-aa5f1525a7f4
+		summarizeBy: none
+		sourceColumn: Classid
+
+		annotation SummarizationSetBy = Automatic
+
+	column Actualcount
+		dataType: int64
+		formatString: 0
+		lineageTag: c48525cb-aa67-4c3e-b5b1-8012bee7e05b
+		summarizeBy: sum
+		sourceColumn: Actualcount
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Asset_fact = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\nayya\OneDrive\Desktop\Interview prep\School Data sample.xlsx"), null, true),
+				    Asset_fact_Sheet = Source{[Item="Asset_fact",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Asset_fact_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"AssetID", Int64.Type}, {"Classid", Int64.Type}, {"Actualcount", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

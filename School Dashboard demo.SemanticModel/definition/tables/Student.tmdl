@@ -1,0 +1,147 @@
+table Student
+	isHidden
+	lineageTag: af691e4f-5089-48b0-b98e-1436cb3e2eae
+
+	column SID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 17475b54-ea36-4291-84b3-0e3141bde08f
+		summarizeBy: count
+		sourceColumn: SID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		isHidden
+		lineageTag: e776ecad-462b-4ccc-83fd-b8763945c099
+		summarizeBy: none
+		sourceColumn: Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gender
+		dataType: string
+		isHidden
+		lineageTag: 46a33a8b-8444-4f11-97b9-c3d2783bdccc
+		summarizeBy: none
+		sourceColumn: Gender
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column EID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ec43192e-7d94-4dfc-8958-cf93a6effc90
+		summarizeBy: count
+		sourceColumn: EID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a8f678b9-e884-4d9e-90e8-2f054923b1ac
+		summarizeBy: sum
+		sourceColumn: Age
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Classid
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cd7a6aca-0edf-44c2-b301-9e8b0eb549a1
+		summarizeBy: sum
+		sourceColumn: Classid
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Enrol_Year
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a3fa8702-8b86-4af8-b41a-46d4c0fbed8e
+		summarizeBy: sum
+		sourceColumn: Enrol_Year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Active
+		dataType: string
+		isHidden
+		lineageTag: d396f237-b96c-4df3-a908-c4389e8c8e27
+		summarizeBy: none
+		sourceColumn: Active
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Attendance
+		dataType: double
+		isHidden
+		lineageTag: fc7e4478-1edd-4798-9253-4bb7fd15eefd
+		summarizeBy: sum
+		sourceColumn: Attendance
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column National_Success_Type
+		dataType: string
+		isHidden
+		lineageTag: 024969a1-6ad3-4208-af63-915eeeeecedd
+		summarizeBy: none
+		sourceColumn: National_Success_Type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column win_status
+		dataType: string
+		isHidden
+		lineageTag: 84b80820-c7e4-4274-9889-36402ccd5520
+		summarizeBy: none
+		sourceColumn: win_status
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Student = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\nayya\OneDrive\Desktop\Interview prep\School Data sample.xlsx"), null, true),
+				    Student_Sheet = Source{[Item="Student",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Student_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"SID", Int64.Type}, {"Name", type text}, {"Gender", type text}, {"EID", Int64.Type}, {"Age", Int64.Type}, {"Classid", Int64.Type}, {"Enrol_Year", Int64.Type}, {"Active", type text}, {"Attendance", type number}, {"National_Success_Type", type text}, {"win_status", type text}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,56 @@
+table Incident_fact
+	lineageTag: d1049d9c-5684-4d0f-b96b-c8e4f4129ccb
+
+	measure 'Total incidents' = COUNT(Incident_fact[IncID])
+		formatString: 0
+		lineageTag: 3d4f3b9a-5157-4e9c-80d2-a7580daef212
+
+	column IncID
+		dataType: int64
+		formatString: 0
+		lineageTag: 83c43aa7-dd56-4280-9f4b-3367c5b70882
+		summarizeBy: count
+		sourceColumn: IncID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: f14f81d8-fece-4d54-a283-4ae80482c59b
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column ClassID
+		dataType: int64
+		formatString: 0
+		lineageTag: aac39630-8ed1-408a-a7bb-9f3bd408a019
+		summarizeBy: none
+		sourceColumn: ClassID
+
+		annotation SummarizationSetBy = Automatic
+
+	column incident_type_id
+		dataType: int64
+		formatString: 0
+		lineageTag: e4f4babb-4af6-4c28-b624-bf04a084bdec
+		summarizeBy: none
+		sourceColumn: incident_type_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Incident_fact = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\nayya\OneDrive\Desktop\Interview prep\School Data sample.xlsx"), null, true),
+				    Incident_fact_Sheet = Source{[Item="Incident_fact",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Incident_fact_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"IncID", Int64.Type}, {"Year", Int64.Type}, {"ClassID", Int64.Type}, {"incident_type_id", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

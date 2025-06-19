@@ -1,0 +1,33 @@
+table Incident
+	lineageTag: 295f1781-885a-4060-bd26-20583d092211
+
+	column incident_type_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 72a0f318-5972-4a20-b075-85bcf9a7f29a
+		summarizeBy: none
+		sourceColumn: incident_type_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: fde7d6e5-b5ef-4260-a1af-6ffa2963ed59
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Incident = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\nayya\OneDrive\Desktop\Interview prep\School Data sample.xlsx"), null, true),
+				    Incident_Sheet = Source{[Item="Incident",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Incident_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"incident_type_id", Int64.Type}, {"Type", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

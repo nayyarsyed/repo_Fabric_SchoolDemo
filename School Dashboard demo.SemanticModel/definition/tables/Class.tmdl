@@ -1,0 +1,34 @@
+table Class
+	lineageTag: a24ecb3c-62fc-4897-8d36-8713cc1cf6f2
+
+	column Classid
+		dataType: int64
+		formatString: 0
+		lineageTag: a3f39592-ccc9-4484-ad06-b1d09ead57fc
+		summarizeBy: none
+		sourceColumn: Classid
+
+		annotation SummarizationSetBy = Automatic
+
+	column MinAge
+		dataType: int64
+		formatString: 0
+		lineageTag: ced44082-6226-46e9-b723-10883f1f78f0
+		summarizeBy: sum
+		sourceColumn: MinAge
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Class = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\nayya\OneDrive\Desktop\Interview prep\School Data sample.xlsx"), null, true),
+				    Class_Sheet = Source{[Item="Class",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Class_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Classid", Int64.Type}, {"MinAge", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
