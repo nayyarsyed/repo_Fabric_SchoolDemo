@@ -1,5 +1,4 @@
 table Student
-	isHidden
 	lineageTag: af691e4f-5089-48b0-b98e-1436cb3e2eae
 
 	column SID
@@ -50,7 +49,6 @@ table Student
 
 	column Age
 		dataType: int64
-		isHidden
 		formatString: 0
 		lineageTag: a8f678b9-e884-4d9e-90e8-2f054923b1ac
 		summarizeBy: sum
@@ -86,7 +84,6 @@ table Student
 
 	column Active
 		dataType: string
-		isHidden
 		lineageTag: d396f237-b96c-4df3-a908-c4389e8c8e27
 		summarizeBy: none
 		sourceColumn: Active
